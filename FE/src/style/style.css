@@ -1,0 +1,192 @@
+html, body {
+  height: 100%; /* Pastikan html dan body memiliki tinggi 100% */
+  margin: 0; /* Hilangkan margin default */
+  padding: 0; /* Hilangkan padding default */
+  background-color: #171717;
+  color: #fff;
+}
+
+body {
+  display: flex; /* Gunakan Flexbox untuk mengatur konten */
+  flex-direction: column; /* Atur arah konten secara vertikal */
+  justify-content: space-between; /* Atur konten agar mengisi ruang yang tersedia */
+  min-height: 100vh; /* Pastikan body setidaknya setinggi viewport */
+  align-items: center;
+}
+
+@font-face {
+    font-family: Quicksand;
+    src: url('../public/font/Quicksand-VariableFont_wght.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap
+}
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+#loginCard{
+  width: 100%;
+  height: 100%;
+}
+/* login */
+/* From Uiverse.io by yashasvi9199 */ 
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: inherit;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 0.4em;
+    background-color: #171717;
+  }
+  .form:hover {
+    border-radius: 25px;
+    transition: 0.2s ease-in-out;
+    -webkit-transition: 0.2s ease-in-out;
+    -moz-transition: 0.2s ease-in-out;
+    -ms-transition: 0.2s ease-in-out;
+    -o-transition: 0.2s ease-in-out;
+}
+  
+  .card {
+    background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+    border-radius: 22px;
+    transition: all 0.3s;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .card2 {
+    border-radius: 0;
+    transition: all 0.2s;
+  }
+  
+  .card2:hover {
+    transform: scale(0.98);
+    border-radius: 20px;
+  }
+  
+  .card:hover {
+    box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.3);
+  }
+  
+  #heading {
+    text-align: center;
+    margin: 2em;
+    color: rgb(255, 255, 255);
+    font-size: 1.2em;
+  }
+  
+  .field {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    border-radius: 25px;
+    padding: 0.6em;
+    border: none;
+    outline: none;
+    color: white;
+    background-color: #171717;
+    box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+  }
+  
+  .input-icon {
+    height: 1.3em;
+    width: 1.3em;
+    fill: white;
+  }
+  
+  .input-field {
+    background: none;
+    border: none;
+    outline: none;
+    width: 100%;
+    color: #d3d3d3;
+  }
+  
+  .form .btn {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin-top: 2.5em;
+  }
+  
+  .button1 {
+    padding: 0.5em;
+    padding-left: 1.1em;
+    padding-right: 1.1em;
+    border-radius: 5px;
+    margin-right: 0.5em;
+    border: none;
+    outline: none;
+    transition: 0.4s ease-in-out;
+    background-color: #252525;
+    color: white;
+  }
+  
+  .button1:hover {
+    background-color: black;
+    color: white;
+  }
+  
+  .button2 {
+    padding: 0.5em;
+    padding-left: 2.3em;
+    padding-right: 2.3em;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    transition: 0.4s ease-in-out;
+    background-color: #252525;
+    color: white;
+  }
+  
+  .button2:hover {
+    background-color: black;
+    color: white;
+  }
+  
+  .button3 {
+    margin-bottom: 3em;
+    padding: 0.5em;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    transition: 0.4s ease-in-out;
+    background-color: #252525;
+    color: white;
+  }
+  
+  .button3:hover {
+    background-color: red;
+    color: white;
+  }
+  
+  
+
+.skip-to-content {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    height: 44px;
+    background-color: #19376d;
+    color: #fff;
+    padding: 8px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity .5s;
+    -webkit-transition: opacity .5s;
+    -moz-transition: opacity .5s;
+    -ms-transition: opacity .5s;
+    -o-transition: opacity .5s
+}
+
+body:hover .skip-to-content:focus {
+    opacity: 1
+}
