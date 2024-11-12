@@ -1,0 +1,19 @@
+{
+    "id": "restaurant-katalogue-lite-pwa",
+    "start_url": "./index.html",
+    "name": "Restaurant Catalogue",
+    "short_name": "Restaurant Catalogue",
+    "description": "Free restaurant catalogue for you",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4DBA87",
+    "icons": [
+        {
+            "src": "/icons/icon.png",            
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        }
+        
+    ]
+}
