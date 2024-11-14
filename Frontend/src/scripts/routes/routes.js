@@ -1,12 +1,12 @@
 /* eslint-disable linebreak-style */
-import Home from '../views/pages/dashboard.js';
-import Favorite from '../views/pages/favorite.js';
-import Detail from '../views/pages/detail.js';
+import Home from '../views/pages/home.js';
+import Login from '../views/pages/login.js';
+import Signup from '../views/pages/signup.js';
 
 const routes = {
   '/': Home,
   '/home': Home,
-  '/favorite': Favorite,
-  '/detail/:id': Detail
+  '/login': Login,
+  '/signup': Signup
 };
 export default routes;
