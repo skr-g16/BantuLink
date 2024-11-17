@@ -12,7 +12,8 @@
     "e2e": "codeceptjs run --config codecept.conf.cjs",
     "build": "webpack --config webpack.prod.cjs",
     "deploy": "npm run build && http-server dist --port 9000",
-    "dev": "webpack serve --config webpack.dev.js"
+    "dev": "webpack serve --config webpack.dev.js",
+    "serve": "http-server dist --port 9000"
   },
   "keywords": [],
   "author": "<@lamro> (https://github.com/lamro)",
