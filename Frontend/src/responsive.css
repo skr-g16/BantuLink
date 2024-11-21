@@ -1,0 +1,40 @@
+@media (min-width: 601px) {
+    #hamburgerButton {
+      display: none; /* Sembunyikan tombol hamburger */
+    }
+    .menu {
+      display: flex; /* Tampilkan menu pada layar besar */
+    }
+  }
+@media screen and (max-width: 426px) {
+    .parent {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+        grid-column-gap: 0px;
+        grid-row-gap: 0px;
+        }
+        
+        .div1 { grid-area: 1 / 1 / 2 / 2; }
+        .div2 { grid-area: 2 / 1 / 3 / 2; }
+        .div3 { grid-area: 4 / 1 / 5 / 2;  }
+        .div4 { grid-area: 3 / 1 / 4 / 2; }
+}
+
+  /* ===========================
+   LIGHT THEME STYLES
+=========================== */
+@media (prefers-color-scheme: light) {
+    :root {
+      color: #213547;
+      background-color: #ffffff;
+    }
+    
+    a:hover {
+      color: #747bff;
+    }
+    
+    button {
+      background-color: #f9f9f9;
+    }
+  }
