@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaUser , FaLock } from 'react-icons/fa'; // Mengimpor ikon dari react-icons
 
 export const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -11,55 +12,58 @@ export const Login = ({ onLogin }) => {
     e.preventDefault();
 
     if (!username || !password) {
-      alert('Please fill in all fields');
+      alert('Silakan isi semua kolom');
       return;
     }
 
     console.log('Username:', username);
     console.log('Password:', password);
     
-    // Lakukan logika autentikasi di sini
+    // Logika autentikasi bisa ditambahkan di sini
     onLogin(); // Panggil fungsi untuk mengubah status login
 
-    navigate('/'); // Navigasi ke halaman setelah login berhasil
+    navigate('/'); // Arahkan ke halaman utama setelah login berhasil
   };
 
   return (
-    <div id="app">
-      <div className="card">
-        <div className="card2">
-          <form className="form" id="loginForm" onSubmit={handleLogin}>
-            <p id="heading">Login</p>
-            <div className="field">
-            <svg viewBox="0 0 16 16" fill="currentColor" height="16" width="16"
-                xmlns="http://www.w3.org/2000/svg" className="input-icon">
-                <path
-                    d="M8 0a4 4 0 1 1 0 8A4 4 0 0 1 8 0zm0 10a6 6 0 1 0 6 6 6 6 0 0 0-6-6zm0 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8z">
-                </path>
-            </svg>
-              <input type="text" className="input-field" placeholder="Username" autoComplete="off"
-                value={username} onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div className="field">
-            <svg viewBox="0 0 16 16" fill="currentColor" height="16" width="16"
-                            xmlns="http://www.w3.org/2000/svg" className="input-icon">
-                            <path
-                                d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z">
-                            </path>
-                        </svg>
-              <input type="password" className="input-field" placeholder="Password" value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div className="btn">
-              <button type="submit" className="button1">Login</button>
-              <button type="button" className="button2" onClick={() => navigate('/signup')}>Sign Up</button>
-            </div>
-          </form>
-        </div>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r">
+      <div className="bg-white shadow-2xl rounded-lg p-10 max-w-sm w-full transition-transform transform">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Selamat Datang Kembali</h2>
+        <form className="space-y-6" id="loginForm" onSubmit={handleLogin}>
+          <div className="flex items-center border border-gray-300 rounded-lg p-3 transition duration-300 hover:shadow-lg">
+            <FaUser  className="text-gray-400 mr-2" /> {/* Ikon untuk username */}
+            <input 
+              type="text" 
+              className="flex-1 border-none bg-transparent focus:ring-0 focus:outline-none text-gray-800 placeholder-gray-400" 
+              placeholder="Username" 
+              autoComplete="off"
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)}
+              required 
+            />
+          </div>
+          <div className="flex items-center border border-gray-300 rounded-lg p-3 transition duration-300 hover:shadow-lg">
+            <FaLock className="text-gray-400 mr-2" /> {/* Ikon untuk password */}
+            <input 
+              type="password" 
+              className="flex-1 border-none bg-transparent focus:ring-0 focus:outline-none text-gray-800 placeholder-gray-400" 
+              placeholder="Password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required 
+            />
+          </div>
+          <div className="flex justify-center mt-4">
+            <button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-semibold py-3 rounded-lg transition duration-300 hover:shadow-xl transform hover:translate-y-1">
+              Login
+            </button>
+          </div>
+          <div className="flex justify-center mt-4">
+            <button type="button" className="text-orange-600 font-semibold hover:underline" onClick={() => navigate('/signup')}>
+              Belum punya akun? Daftar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
