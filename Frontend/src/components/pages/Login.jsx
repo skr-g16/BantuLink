@@ -59,9 +59,13 @@ export const Login = ({ onLogin }) => {
             </button>
           </div>
           <div className="flex justify-center mt-4">
+            <p>
+              Belum punya akun?&nbsp;
             <button type="button" className="text-orange-600 font-semibold hover:underline" onClick={() => navigate('/signup')}>
-              Belum punya akun? Daftar
+              Daftar
             </button>
+            </p>
+            
           </div>
         </form>
       </div>

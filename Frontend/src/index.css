@@ -19,6 +19,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+#root {
+  min-width: inherit;
+  min-height: inherit;
+}
+
+
+
 /* Untuk Firefox */
 html {
   scrollbar-width: none; /* Sembunyikan scrollbar */

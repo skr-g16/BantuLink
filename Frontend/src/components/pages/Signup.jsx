@@ -116,11 +116,12 @@ return (
         </button>
       </div>
       <div className="flex justify-center mt-4">
-        <button type="button" className="text-orange-600 font-semibold hover:underline" onClick={()=>
-          navigate('/login')}
-          >
-          Sudah punya akun? Masuk
-        </button>
+      <p>
+              Sudah punya akun?&nbsp;
+            <button type="button" className="text-orange-600 font-semibold hover:underline" onClick={() => navigate('/login')}>
+              Login
+            </button>
+            </p>
       </div>
     </form>
   </div>
