@@ -2,6 +2,8 @@
 
 ## Endpoint
 
+54.255.179.252:5000
+
 ## Register User
 
 **Request** :
