@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* ===========================
+   ROOT STYLES
+=========================== */
+:root {
+  font-family: Inter, system-ui, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  width: 100%;
+  height: inherit;
+  color-scheme: light dark;
+  color: black;
+  background-color: #fff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#root {
+  min-width: inherit;
+  min-height: inherit;
+}
+
+
+
+/* Untuk Firefox */
+html {
+  scrollbar-width: none; /* Sembunyikan scrollbar */
+}
+
+/* Untuk Internet Explorer dan Edge */
+html {
+  -ms-overflow-style: none; /* Sembunyikan scrollbar */
+}
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+}
