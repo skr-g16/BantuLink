@@ -2,9 +2,10 @@
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 
-const bycrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
+const AuthenticationError = require('../../exceptions/AuthenticationsError');
 
 class UsersServices {
   constructor() {
@@ -15,7 +16,7 @@ class UsersServices {
     await this.verifyUserEmail(email);
     await this.verifyUserPhoneNumber(phone_number);
     const id = `user-${nanoid(16)}`;
-    const hashedPassword = await bycrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const created_at = new Date().toISOString();
     const updated_at = created_at;
     const role = 'donor';
@@ -36,16 +37,11 @@ class UsersServices {
       ],
     };
 
-    try {
-      const result = await this._pool.query(query);
-      if (!result.rows[0].id) {
-        throw new InvariantError('User gagal ditambahkan');
-      }
-      return result.rows[0].id;
-    } catch (error) {
-      console.error('Database error:', error.message);
-      throw new InvariantError('Gagal menambahkan user');
+    const result = await this._pool.query(query);
+    if (!result.rows[0].id) {
+      throw new InvariantError('User gagal ditambahkan');
     }
+    return result.rows[0].id;
   }
 
   async verifyUserEmail(email) {
@@ -84,6 +80,26 @@ class UsersServices {
       throw new NotFoundError('User tidak ditemukan');
     }
     return result.rows[0];
+  }
+
+  async verifyUserCredential(email, password) {
+    const query = {
+      text: 'SELECT id, password FROM users WHERE email = $1',
+      values: [email],
+    };
+
+    const result = await this._pool.query(query);
+    if (!result.rows.length) {
+      throw new AuthenticationError('Kredensial yang Anda berikan salah ---');
+    }
+
+    const { id, password: hashedPassword } = result.rows[0];
+    const match = await bcrypt.compare(password, hashedPassword);
+
+    if (!match) {
+      throw new AuthenticationError('Kredensial yang Anda berikan salah');
+    }
+    return id;
   }
 }
 

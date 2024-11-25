@@ -8,8 +8,15 @@ const UsersService = require('./services/postgres/UsersServices');
 const UsersValidator = require('./validator/Users');
 const users = require('./api/Users');
 
+//authentications
+const authentications = require('./api/Authentications');
+const AuthenticationsService = require('./services/postgres/AuthenticationsServices');
+const AuthenticationsValidator = require('./validator/Authentications');
+const TokenManager = require('./tokenize/TokenManager');
+
 const init = async () => {
   const usersService = new UsersService();
+  const authenticationsService = new AuthenticationsService();
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
@@ -20,13 +27,24 @@ const init = async () => {
     },
   });
 
-  await server.register({
-    plugin: users,
-    options: {
-      service: usersService,
-      validator: UsersValidator,
+  await server.register([
+    {
+      plugin: users,
+      options: {
+        service: usersService,
+        validator: UsersValidator,
+      },
     },
-  });
+    {
+      plugin: authentications,
+      options: {
+        authenticationsService,
+        usersService,
+        tokenManager: TokenManager,
+        validator: AuthenticationsValidator,
+      },
+    },
+  ]);
 
   //custom error
   server.ext('onPreResponse', (request, h) => {
