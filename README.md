@@ -6,6 +6,3 @@ Adapun Cakupan proyek yang kami buat adalah sebagai berikut:
 2. Autentikasi Pengguna: Sistem untuk mengelola akses penyumbang, relawan, dan koordinator lapangan.
 3. Dashboard Koordinasi, dashboard ini menyediakan informasi bantuan dan donasi real-time untuk tim di lapangan.
 4. Inventarisasi Gudang, membangun sistem pelacakan stok di berbagai gudang bantuan.
-   
-
-
