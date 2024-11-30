@@ -20,8 +20,8 @@
   "fullname": "string",
   "email": "string, unique",
   "password": "string, minlenght(6)",
-  "phone_number": "string",
-  "gender": "string, pattern(/^(?:+62|62|0)[2-9][0-9]{8,12}$/)", //+62, 62, atau 0 diikuti 8-12 digit
+  "phone_number": "string pattern(/^(?:+62|62|0)[2-9][0-9]{8,12}$/)", //+62, 62, atau 0 diikuti 8-12 digit
+  "gender": "string",
   "address": "string, minlenght(10)"
 }
 ```
@@ -84,8 +84,8 @@
   "fullname": "string",
   "email": "string, unique",
   "password": "string, minlenght(6)",
-  "phone_number": "string",
-  "gender": "string, pattern(/^(?:+62|62|0)[2-9][0-9]{8,12}$/)", //+62, 62, atau 0 diikuti 8-12 digit
+  "phone_number": "string pattern(/^(?:+62|62|0)[2-9][0-9]{8,12}$/)", //+62, 62, atau 0 diikuti 8-12 digit
+  "gender": "string",
   "address": "string, minlenght(10)"
 }
 ```
