@@ -82,6 +82,31 @@ class UsersServices {
     return result.rows[0];
   }
 
+  async editProfileUser(
+    id,
+    { fullname, email, password, phone_number, gender, address }
+  ) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const updated_at = new Date().toISOString();
+    const query = {
+      text: 'UPDATE users SET fullname = $1, email = $2, password = $3, phone_number = $4, gender = $5, address = $6, updated_at = $7 WHERE id = $8 RETURNING id',
+      values: [
+        fullname,
+        email,
+        hashedPassword,
+        phone_number,
+        gender,
+        address,
+        updated_at,
+        id,
+      ],
+    };
+    const result = await this._pool.query(query);
+    if (!result.rows.length) {
+      throw new NotFoundError('Profile gagal di Update, User tidak ditemukan');
+    }
+  }
+
   async verifyUserCredential(email, password) {
     const query = {
       text: 'SELECT id, password FROM users WHERE email = $1',
@@ -90,7 +115,7 @@ class UsersServices {
 
     const result = await this._pool.query(query);
     if (!result.rows.length) {
-      throw new AuthenticationError('Kredensial yang Anda berikan salah ---');
+      throw new AuthenticationError('Kredensial yang Anda berikan salah');
     }
 
     const { id, password: hashedPassword } = result.rows[0];
