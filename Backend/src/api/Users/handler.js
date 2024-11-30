@@ -39,6 +39,25 @@ class UsersHandler {
       },
     };
   }
+
+  async putUserHandler(request) {
+    this._validator.validateUpdateProfilePayload(request.payload);
+    const { id } = request.params;
+    const { fullname, email, password, phone_number, gender, address } =
+      request.payload;
+    await this._service.editProfileUser(id, {
+      fullname,
+      email,
+      password,
+      phone_number,
+      gender,
+      address,
+    });
+    return {
+      status: 'success',
+      message: 'Profile berhasil di Update',
+    };
+  }
 }
 
 module.exports = UsersHandler;

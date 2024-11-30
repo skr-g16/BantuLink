@@ -9,5 +9,10 @@ const routes = (handler) => [
     path: '/users/{id}',
     handler: handler.getUserByIdHandler,
   },
+  {
+    method: 'PUT',
+    path: '/users/{id}',
+    handler: handler.putUserHandler,
+  },
 ];
 module.exports = routes;
