@@ -216,8 +216,8 @@ export const Profile = () => {
                   className="w-full bg-white p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                 >
                   <option value="">Select Gender</option>
-                  <option value="L">Male</option>
-                  <option value="P">Female</option>
+                  <option value="Laki-Laki">Male</option>
+                  <option value="Perempuan">Female</option>
                 </select>
                 {errors?.gender && <p className="text-red-500 text-sm mt-2">{errors.gender}</p>}
               </div>

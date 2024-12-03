@@ -25,12 +25,22 @@ export const Navbar = ({ isLoggedIn, onLogout }) => {
                     </span>
                 </Link>
                 
-                <div className={`hamburger ${menuOpen ? 'open' : ''} md:hidden cursor-pointer p-2 rounded-lg hover:bg-gray-100`} 
-                    onClick={toggleMenu}>
-                    <div className="w-6 h-0.5 bg-gray-600 mb-1.5 rounded-full transition-all"></div>
-                    <div className="w-6 h-0.5 bg-gray-600 mb-1.5 rounded-full transition-all"></div>
-                    <div className="w-6 h-0.5 bg-gray-600 rounded-full transition-all"></div>
-                </div>
+                <div className={`hamburger ${menuOpen ? 'open' : ''} md:hidden cursor-pointer p-3 rounded-full hover:bg-orange-50 transition-colors`} 
+    onClick={toggleMenu}>
+    <div className="flex flex-col gap-1.5 relative w-6 h-5">
+        <div className={`w-6 h-0.5 bg-gray-700 rounded-full absolute transition-all duration-300 ${
+            menuOpen ? 'top-2 rotate-45' : 'top-0'
+        }`}></div>
+        <div className={`w-6 h-0.5 bg-gray-700 rounded-full absolute top-2 transition-all duration-300 ${
+            menuOpen ? 'opacity-0 translate-x-2' : 'opacity-100'
+        }`}></div>
+        <div className={`w-6 h-0.5 bg-gray-700 rounded-full absolute transition-all duration-300 ${
+            menuOpen ? 'top-2 -rotate-45' : 'top-4'
+        }`}></div>
+    </div>
+</div>
+
+
 
                 <ul className={`absolute md:static md:bg-transparent w-full md:w-auto transition-all left-0 duration-300 ease-in-out 
                     ${menuOpen ? 'top-16 opacity-100 bg-white/95 shadow-lg' : 'top-[-200px] opacity-0'} 
