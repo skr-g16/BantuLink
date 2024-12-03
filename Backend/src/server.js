@@ -1,5 +1,8 @@
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
+const Inert = require('@hapi/inert');
+const Vision = require('@hapi/vision');
+const HapiSwagger = require('hapi-swagger');
 require('dotenv').config();
 
 const ClientError = require('./exceptions/ClientError');
@@ -20,6 +23,17 @@ const RequestsService = require('./services/postgres/RequestsServices');
 const RequestsValidator = require('./validator/Requests');
 const requests = require('./api/Requests');
 
+const swaggerOptions = {
+  info: {
+    title: 'BantuLink API Documentation',
+    version: '1.0.0',
+  },
+  deReference: true,
+  documentationPath: '/docs',
+  grouping: 'tags',
+  sortEndpoints: 'ordered',
+};
+
 const init = async () => {
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
@@ -36,6 +50,12 @@ const init = async () => {
 
   //register jwt
   await server.register([
+    Inert,
+    Vision,
+    {
+      plugin: HapiSwagger,
+      options: swaggerOptions,
+    },
     {
       plugin: Jwt,
     },

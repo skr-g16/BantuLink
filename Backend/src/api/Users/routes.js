@@ -1,8 +1,3 @@
-/**
- * User routes
- * @param {Object} handler - User handler
- * @return {Array} array of routes
- */
 const routes = (handler) => [
   {
     method: 'POST',
