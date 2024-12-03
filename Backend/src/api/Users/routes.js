@@ -1,3 +1,8 @@
+/**
+ * User routes
+ * @param {Object} handler - User handler
+ * @return {Array} array of routes
+ */
 const routes = (handler) => [
   {
     method: 'POST',
@@ -8,11 +13,17 @@ const routes = (handler) => [
     method: 'GET',
     path: '/users/{id}',
     handler: handler.getUserByIdHandler,
+    options: {
+      auth: 'bantulink_jwt',
+    },
   },
   {
     method: 'PUT',
     path: '/users/{id}',
     handler: handler.putUserHandler,
+    options: {
+      auth: 'bantulink_jwt',
+    },
   },
 ];
 module.exports = routes;

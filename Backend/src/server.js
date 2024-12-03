@@ -1,4 +1,5 @@
 const Hapi = require('@hapi/hapi');
+const Jwt = require('@hapi/jwt');
 require('dotenv').config();
 
 const ClientError = require('./exceptions/ClientError');
@@ -14,9 +15,15 @@ const AuthenticationsService = require('./services/postgres/AuthenticationsServi
 const AuthenticationsValidator = require('./validator/Authentications');
 const TokenManager = require('./tokenize/TokenManager');
 
+//requests
+const RequestsService = require('./services/postgres/RequestsServices');
+const RequestsValidator = require('./validator/Requests');
+const requests = require('./api/Requests');
+
 const init = async () => {
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
+  const requestsService = new RequestsService();
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
@@ -25,6 +32,29 @@ const init = async () => {
         origin: ['*'],
       },
     },
+  });
+
+  //register jwt
+  await server.register([
+    {
+      plugin: Jwt,
+    },
+  ]);
+  //define auth strategy
+  server.auth.strategy('bantulink_jwt', 'jwt', {
+    keys: process.env.ACCESS_TOKEN_KEY,
+    verify: {
+      aud: false,
+      iss: false,
+      sub: false,
+      maxAgeSec: process.env.ACCESS_TOKEN_AGE,
+    },
+    validate: (artifacts) => ({
+      isValid: true,
+      credentials: {
+        id: artifacts.decoded.payload.id,
+      },
+    }),
   });
 
   await server.register([
@@ -42,6 +72,13 @@ const init = async () => {
         usersService,
         tokenManager: TokenManager,
         validator: AuthenticationsValidator,
+      },
+    },
+    {
+      plugin: requests,
+      options: {
+        service: requestsService,
+        validator: RequestsValidator,
       },
     },
   ]);
