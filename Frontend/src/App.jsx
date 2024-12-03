@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {Route, Routes} from 'react-router-dom'
 import { Navbar } from './components/Navbar'
-import {About, Home, Login, Signup} from './components/pages'
+import {About, Home, Login, Signup, Profile} from './components/pages'
 
 const App = () => {
   
@@ -18,9 +18,10 @@ const handleLogout = () => {
       <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout}/>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/about" element={<About/>}/>
-        <Route path="/login" element={<Login onLogin={handleLogin}/>}/>
-        <Route path="/signup" element={<Signup/>}/>
+        <Route path="/About" element={<About/>}/>
+        <Route path="/Login" element={<Login onLogin={handleLogin}/>}/>
+        <Route path="/Signup" element={<Signup/>}/>
+        <Route path="/Profile/:userId" element={<Profile/>}/>
       </Routes>
     </div>
   )
