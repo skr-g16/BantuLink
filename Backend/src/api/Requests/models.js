@@ -1,128 +1,142 @@
 const Joi = require('joi');
 
-const RequestsModels = {
-  CreateRequest: Joi.object({
-    disasterId: Joi.string().required(),
-    description: Joi.string().required(),
-    requestItems: Joi.array()
-      .items(
-        Joi.object({
-          categoryId: Joi.string().required(),
-          quantity: Joi.number().integer().min(1).required(),
-          unitId: Joi.string().required(),
-          description: Joi.string().required(),
-        })
-      )
-      .min(1)
-      .required(),
-  }).label('CreateRequestRequest'),
+const createRequestResponse = Joi.object({
+  status: Joi.string()
+    .required()
+    .description('Response status')
+    .example('success'),
+  message: Joi.string()
+    .required()
+    .description('Response message')
+    .example('Request bantuan berhasil dibuat'),
+  data: Joi.object({
+    requestId: Joi.string()
+      .required()
+      .description('Request ID')
+      .example('request-123'),
+  }),
+});
 
-  CreateRequestResponse: Joi.object({
-    status: Joi.string()
+const getResponseById = Joi.object({
+  status: Joi.string()
+    .required()
+    .description('Response status')
+    .example('success'),
+  data: Joi.object({
+    requestId: Joi.string()
       .required()
-      .description('Response status')
-      .example('success'),
-    message: Joi.string()
-      .required()
-      .description('Response message')
-      .example('Request bantuan berhasil dibuat'),
-    data: Joi.object({
-      requestId: Joi.string()
-        .required()
-        .description('Request ID')
-        .example('request-123'),
-    }),
-  }).label('CreateRequestResponse'),
+      .description('Request Data')
+      .example({
+        id: 'request-123',
+        disasterId: 'disaster-123',
+        description: 'Bantuan bencana alam',
+        requestItems: [
+          {
+            categoryId: 'category-123',
+            quantity: 10,
+            unitId: 'unit-123',
+            description: 'Peralatan bantuan',
+          },
+        ],
+      }),
+  }),
+});
 
-  GetResponse: Joi.object({
-    status: Joi.string()
-      .required()
-      .description('Response status')
-      .example('success'),
-    data: Joi.object({
-      requestId: Joi.string()
-        .required()
-        .description('Request Data')
-        .example({
-          id: 'request-123',
-          disasterId: 'disaster-123',
-          description: 'Bantuan bencana alam',
-          requestItems: [
+const getAllResponse = Joi.object({
+  status: Joi.string()
+    .required()
+    .description('Response status')
+    .example('success'),
+  data: Joi.array()
+    .items(
+      Joi.object({
+        id: Joi.string().required().example('request-123'),
+        disasterId: Joi.string().required().example('disaster-123'),
+        description: Joi.string().required().example('Bantuan bencana alam'),
+        requestItems: Joi.array()
+          .items(
+            Joi.object({
+              categoryId: Joi.string().required().example('category-123'),
+              quantity: Joi.number().integer().min(1).required().example(10),
+              unitId: Joi.string().required().example('unit-123'),
+              description: Joi.string().required().example('Peralatan bantuan'),
+            })
+          )
+          .min(1)
+          .required()
+          .example([
             {
               categoryId: 'category-123',
               quantity: 10,
               unitId: 'unit-123',
               description: 'Peralatan bantuan',
             },
-          ],
-        }),
-    }),
-  }).label('CreateRequestResponse'),
+            {
+              categoryId: 'category-124',
+              quantity: 20,
+              unitId: 'unit-124',
+              description: 'Makanan',
+            },
+          ]),
+      })
+    )
+    .required()
+    .example([
+      {
+        id: 'request-123',
+        disasterId: 'disaster-123',
+        description: 'Bantuan bencana alam',
+        requestItems: [
+          {
+            categoryId: 'category-123',
+            quantity: 10,
+            unitId: 'unit-123',
+            description: 'Peralatan bantuan',
+          },
+        ],
+      },
+      {
+        id: 'request-124',
+        disasterId: 'disaster-124',
+        description: 'Bantuan gempa',
+        requestItems: [
+          {
+            categoryId: 'category-124',
+            quantity: 20,
+            unitId: 'unit-124',
+            description: 'Makanan',
+          },
+        ],
+      },
+    ]),
+});
 
-  GetAllResponse: Joi.object({
-    status: Joi.string()
-      .required()
-      .description('Response status')
-      .example('success'),
-    data: Joi.array()
-      .items(
-        Joi.object({
-          id: Joi.string().required(),
-          disasterId: Joi.string().required(),
-          description: Joi.string().required(),
-          requestItems: Joi.array()
-            .items(
-              Joi.object({
-                categoryId: Joi.string().required(),
-                quantity: Joi.number().integer().min(1).required(),
-                unitId: Joi.string().required(),
-                description: Joi.string().required(),
-              })
-            )
-            .min(1)
-            .required(),
-        })
-      )
-      .required(),
-  }).label('GetAllResponse'),
+const updateResponse = Joi.object({
+  status: Joi.string()
+    .required()
+    .description('Response status')
+    .example('success'),
+  message: Joi.string()
+    .required()
+    .description('Response message')
+    .example('Request bantuan berhasil diperbarui'),
+});
 
-  UpdateRequest: Joi.object({
-    disasterId: Joi.string().required(),
-    description: Joi.string().required(),
-    requestItems: Joi.array()
-      .items(
-        Joi.object({
-          categoryId: Joi.string().required(),
-          quantity: Joi.number().integer().min(1).required(),
-          unitId: Joi.string().required(),
-          description: Joi.string().required(),
-        })
-      )
-      .min(1)
-      .required(),
-  }).label('UpdateRequest'),
+const deleteResponse = Joi.object({
+  status: Joi.string()
+    .required()
+    .description('Response status')
+    .example('success'),
+  message: Joi.string()
+    .required()
+    .description('Response message')
+    .example('Request bantuan berhasil dihapus'),
+});
 
-  UpdateResponse: Joi.object({
-    status: Joi.string()
-      .required()
-      .description('Response status')
-      .example('success'),
-    message: Joi.string()
-      .required()
-      .description('Response message')
-      .example('Request bantuan berhasil diperbarui'),
-  }).label('UpdateResponse'),
-
-  DeleteResponse: Joi.object({
-    status: Joi.string()
-      .required()
-      .description('Response status')
-      .example('success'),
-    message: Joi.string()
-      .required()
-      .description('Response message')
-      .example('Request bantuan berhasil dihapus'),
-  }).label('DeleteResponse'),
+module.exports = {
+  createRequestResponse,
+  getResponseById,
+  getAllResponse,
+  updateResponse,
+  deleteResponse,
 };
-
-module.exports = RequestsModels;

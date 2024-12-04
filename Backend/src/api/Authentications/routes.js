@@ -1,4 +1,13 @@
-const AuthenticationModels = require('./models');
+const {
+  loginSchema,
+  putRefreshTokenSchema,
+  logoutSchema,
+} = require('../../validator/Authentications/schema');
+const {
+  loginResponse,
+  refreshTokenResponse,
+  logoutResponse,
+} = require('./models');
 const routes = (handler) => [
   {
     method: 'POST',
@@ -8,11 +17,16 @@ const routes = (handler) => [
       tags: ['api', 'authentications'],
       description: 'Create new authentication / Login',
       validate: {
-        payload: AuthenticationModels.LoginRequest,
+        payload: loginSchema,
       },
-      response: {
-        status: {
-          201: AuthenticationModels.LoginResponse,
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            201: {
+              description: 'Created',
+              schema: loginResponse,
+            },
+          },
         },
       },
     },
@@ -26,11 +40,16 @@ const routes = (handler) => [
       description: 'Refresh authentication token',
       notes: 'Returns new authentication token',
       validate: {
-        payload: AuthenticationModels.RefreshTokenRequest,
+        payload: putRefreshTokenSchema,
       },
-      response: {
-        status: {
-          200: AuthenticationModels.RefreshTokenResponse,
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            200: {
+              description: 'Success',
+              schema: refreshTokenResponse,
+            },
+          },
         },
       },
     },
@@ -44,11 +63,16 @@ const routes = (handler) => [
       description: 'Delete authentication / Logout',
       notes: 'Removes refresh token from database',
       validate: {
-        payload: AuthenticationModels.LogoutRequest,
+        payload: logoutSchema,
       },
-      response: {
-        status: {
-          200: AuthenticationModels.LogoutResponse,
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            200: {
+              description: 'Success',
+              schema: logoutResponse,
+            },
+          },
         },
       },
     },

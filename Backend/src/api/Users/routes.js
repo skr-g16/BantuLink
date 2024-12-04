@@ -1,4 +1,13 @@
-const UserModels = require('./models');
+const {
+  registerSchema,
+  updateProfileSchema,
+} = require('../../validator/Users/schema');
+const {
+  registerResponse,
+  getUserResponse,
+  updateResponse,
+} = require('./models');
+
 const routes = (handler) => [
   {
     method: 'POST',
@@ -8,11 +17,16 @@ const routes = (handler) => [
       tags: ['api', 'users'],
       description: 'Add new user',
       validate: {
-        payload: UserModels.RegisterRequest,
+        payload: registerSchema,
       },
-      response: {
-        status: {
-          201: UserModels.RegisterResponse,
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            201: {
+              description: 'Created',
+              schema: registerResponse,
+            },
+          },
         },
       },
     },
@@ -25,9 +39,23 @@ const routes = (handler) => [
       auth: 'bantulink_jwt',
       tags: ['api', 'users'],
       description: 'Get user profile by id',
-      response: {
-        status: {
-          200: UserModels.GetUserResponse,
+      plugins: {
+        'hapi-swagger': {
+          securityDefinitions: {
+            Bearer: {
+              type: 'apiKey',
+              name: 'Authorization',
+              in: 'header',
+              description: 'JWT Token',
+            },
+          },
+          security: [{ Bearer: [] }],
+          responses: {
+            200: {
+              description: 'Success',
+              schema: getUserResponse,
+            },
+          },
         },
       },
     },
@@ -41,11 +69,17 @@ const routes = (handler) => [
       tags: ['api', 'users'],
       description: 'Update user profile by id',
       validate: {
-        payload: UserModels.UpdateRequest,
+        payload: updateProfileSchema,
       },
-      response: {
-        status: {
-          200: UserModels.UpdateResponse,
+      plugins: {
+        'hapi-swagger': {
+          security: [{ Bearer: [] }],
+          responses: {
+            200: {
+              description: 'Success',
+              schema: updateResponse,
+            },
+          },
         },
       },
     },

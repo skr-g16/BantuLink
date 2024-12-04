@@ -1,19 +1,32 @@
-const RequestsModels = require('./models');
+const { RequestPayloadSchema } = require('../../validator/Requests/schema');
+const {
+  createRequestResponse,
+  getResponseById,
+  getAllResponse,
+  updateResponse,
+  deleteResponse,
+} = require('./models');
 const routes = (handler) => [
   {
     method: 'POST',
     path: '/requests',
-    handler: (request, h) => handler.postRequestHandler(request, h),
+    handler: handler.postRequestHandler,
     options: {
       auth: 'bantulink_jwt',
       tags: ['api', 'requests'],
       description: 'Add new request',
       validate: {
-        payload: RequestsModels.CreateRequest,
+        payload: RequestPayloadSchema,
       },
-      response: {
-        status: {
-          201: RequestsModels.CreateRequestResponse,
+      plugins: {
+        'hapi-swagger': {
+          security: [{ Bearer: [] }],
+          responses: {
+            201: {
+              description: 'Created',
+              schema: createRequestResponse,
+            },
+          },
         },
       },
     },
@@ -21,13 +34,18 @@ const routes = (handler) => [
   {
     method: 'GET',
     path: '/requests/{id}',
-    handler: (request) => handler.getRequestByIdHandler(request),
+    handler: handler.getRequestByIdHandler,
     options: {
       tags: ['api', 'requests'],
       description: 'Get request by id',
-      response: {
-        status: {
-          200: RequestsModels.GetResponse,
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            200: {
+              description: 'Success',
+              schema: getResponseById,
+            },
+          },
         },
       },
     },
@@ -39,9 +57,14 @@ const routes = (handler) => [
     options: {
       tags: ['api', 'requests'],
       description: 'Get all requests',
-      response: {
-        status: {
-          200: RequestsModels.GetAllResponse,
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            200: {
+              description: 'Success',
+              schema: getAllResponse,
+            },
+          },
         },
       },
     },
@@ -49,17 +72,23 @@ const routes = (handler) => [
   {
     method: 'PUT',
     path: '/requests/{id}',
-    handler: (request) => handler.updateRequestHandler(request),
+    handler: handler.updateRequestHandler,
     options: {
       auth: 'bantulink_jwt',
       tags: ['api', 'requests'],
       description: 'Update request by id',
       validate: {
-        payload: RequestsModels.UpdateRequest,
+        payload: RequestPayloadSchema,
       },
-      response: {
-        status: {
-          200: RequestsModels.UpdateResponse,
+      plugins: {
+        'hapi-swagger': {
+          security: [{ Bearer: [] }],
+          responses: {
+            200: {
+              description: 'Success',
+              schema: updateResponse,
+            },
+          },
         },
       },
     },
@@ -67,14 +96,20 @@ const routes = (handler) => [
   {
     method: 'DELETE',
     path: '/requests/{id}',
-    handler: (request) => handler.deleteRequestHandler(request),
+    handler: handler.deleteRequestHandler,
     options: {
       auth: 'bantulink_jwt',
       tags: ['api', 'requests'],
       description: 'Delete request by id',
-      response: {
-        status: {
-          200: RequestsModels.DeleteResponse,
+      plugins: {
+        'hapi-swagger': {
+          security: [{ Bearer: [] }],
+          responses: {
+            200: {
+              description: 'Success',
+              schema: deleteResponse,
+            },
+          },
         },
       },
     },
