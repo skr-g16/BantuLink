@@ -67,8 +67,12 @@ const AuthenticationModels = {
   }).label('LogoutRequest'),
 
   LogoutResponse: Joi.object({
-    status: Joi.string().description('Response status').example('success'),
+    status: Joi.string()
+      .required()
+      .description('Response status')
+      .example('success'),
     message: Joi.string()
+      .required()
       .description('Response message')
       .example('Refresh token berhasil dihapus'),
   }).label('LogoutResponse'),

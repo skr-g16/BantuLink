@@ -27,11 +27,19 @@ const swaggerOptions = {
   info: {
     title: 'BantuLink API Documentation',
     version: '1.0.0',
+    description: 'API documentation for BantuLink',
+    contact: {
+      name: 'BantuLink',
+      url: 'https://github.com/skr-g16/bantulink',
+    },
   },
+  host: 'https://bantulink-api.site',
+  jsonPath: '/swagger.json',
   deReference: true,
   documentationPath: '/docs',
   grouping: 'tags',
   sortEndpoints: 'ordered',
+  schemes: ['https'],
 };
 
 const init = async () => {
