@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const NotFoundError = require('../../exceptions/NotFoundError');
@@ -8,21 +9,24 @@ class RequestsService {
     this._pool = new Pool();
   }
 
-  async addRequest({ userId, disasterId, description, requestItems, owner }) {
+  async addRequest({ disasterId, description, requestItems, owner }) {
     const id = `request-${nanoid(16)}`;
+    const created_at = new Date().toISOString();
+    const updated_at = created_at;
 
     const client = await this._pool.connect();
     try {
       await client.query('BEGIN');
 
       const requestQuery = {
-        text: 'INSERT INTO requests(id, user_id, disaster_id, description, request_status, owner) VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+        text: 'INSERT INTO requests(id, disaster_id, description, request_status, created_at, updated_at, owner) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
         values: [
           id,
-          userId,
           disasterId,
           description,
           'Awaiting Donation',
+          created_at,
+          updated_at,
           owner,
         ],
       };
@@ -59,31 +63,29 @@ class RequestsService {
   async getRequests() {
     const query = {
       text: `SELECT 
-              r.id,
-              r.user_id,
-              r.description,
-              r.request_status,
-              r.created_at,
-              r.updated_at,
-              d.name as disaster_name,
-              (
-                SELECT json_agg(
-                  json_build_object(
-                    'category_name', c.name,
-                    'quantity', ri.quantity,
-                    'unit_name', u.name,
-                    'description', ri.description
+                r.id,
+                r.description,
+                r.request_status,
+                r.created_at,
+                r.updated_at,
+                d.name as disaster_name,
+                (
+                  SELECT json_agg(
+                    json_build_object(
+                      'category_name', c.name,
+                      'quantity', ri.quantity,
+                      'unit_name', u.name,
+                      'description', ri.description
+                    )
                   )
-                )
-                FROM request_items ri
-                JOIN categories c ON ri.category_id = c.id
-                JOIN units u ON ri.unit_id = u.id
-                WHERE ri.request_id = r.id
-              ) as items
-            FROM requests r
-            JOIN disasters d ON r.disaster_id = d.id`,
+                  FROM request_items ri
+                  JOIN categories c ON ri.category_id = c.id
+                  JOIN units u ON ri.unit_id = u.id
+                  WHERE ri.request_id = r.id
+                ) as items
+              FROM requests r
+              JOIN disasters d ON r.disaster_id = d.id`,
     };
-
     const result = await this._pool.query(query);
     return result.rows;
   }
@@ -91,33 +93,31 @@ class RequestsService {
   async getRequestById(id) {
     const query = {
       text: `SELECT 
-              r.id,
-              r.user_id,
-              r.description,
-              r.request_status,
-              r.created_at,
-              r.updated_at,
-              d.name as disaster_name,
-              (
-                SELECT json_agg(
-                  json_build_object(
-                    'category_name', c.name,
-                    'quantity', ri.quantity,
-                    'unit_name', u.name,
-                    'description', ri.description
+                r.id,
+                r.description,
+                r.request_status,
+                r.created_at,
+                r.updated_at,
+                d.name as disaster_name,
+                (
+                  SELECT json_agg(
+                    json_build_object(
+                      'category_name', c.name,
+                      'quantity', ri.quantity,
+                      'unit_name', u.name,
+                      'description', ri.description
+                    )
                   )
-                )
-                FROM request_items ri
-                JOIN categories c ON ri.category_id = c.id
-                JOIN units u ON ri.unit_id = u.id
-                WHERE ri.request_id = r.id
-              ) as items
-            FROM requests r
-            JOIN disasters d ON r.disaster_id = d.id
-            WHERE r.id = $1`,
+                  FROM request_items ri
+                  JOIN categories c ON ri.category_id = c.id
+                  JOIN units u ON ri.unit_id = u.id
+                  WHERE ri.request_id = r.id
+                ) as items
+              FROM requests r
+              JOIN disasters d ON r.disaster_id = d.id
+              WHERE r.id = $1`,
       values: [id],
     };
-
     const result = await this._pool.query(query);
     if (!result.rows.length) {
       throw new NotFoundError('Request tidak ditemukan');
@@ -141,7 +141,6 @@ class RequestsService {
         throw new NotFoundError('Request tidak ditemukan');
       }
 
-      // Delete existing items
       await client.query('DELETE FROM request_items WHERE request_id = $1', [
         id,
       ]);
@@ -177,7 +176,6 @@ class RequestsService {
       text: 'DELETE FROM requests WHERE id = $1 RETURNING id',
       values: [id],
     };
-
     const result = await this._pool.query(query);
     if (!result.rows.length) {
       throw new NotFoundError('Request tidak ditemukan');
@@ -189,7 +187,6 @@ class RequestsService {
       text: 'UPDATE requests SET request_status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id',
       values: [status, id],
     };
-
     const result = await this._pool.query(query);
     if (!result.rows.length) {
       throw new NotFoundError('Request tidak ditemukan');

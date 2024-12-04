@@ -41,9 +41,6 @@ class RequestsHandler {
 
   async getRequestByIdHandler(request) {
     const { id } = request.params;
-    const { id: credentialId } = request.auth.credentials;
-
-    await this._service.verifyRequestOwner(id, credentialId);
     const requestData = await this._service.getRequestById(id);
 
     return {
