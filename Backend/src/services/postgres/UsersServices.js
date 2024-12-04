@@ -19,10 +19,9 @@ class UsersServices {
     const hashedPassword = await bcrypt.hash(password, 10);
     const created_at = new Date().toISOString();
     const updated_at = created_at;
-    const role = 'donor';
 
     const query = {
-      text: 'INSERT INTO users (id, fullname, email, password, phone_number, gender, address, role, created_at, updated_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id',
+      text: 'INSERT INTO users (id, fullname, email, password, phone_number, gender, address, created_at, updated_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
       values: [
         id,
         fullname,
@@ -31,7 +30,6 @@ class UsersServices {
         phone_number,
         gender,
         address,
-        role,
         created_at,
         updated_at,
       ],
@@ -72,7 +70,7 @@ class UsersServices {
 
   async getUserById(id) {
     const query = {
-      text: 'SELECT id, fullname, email, phone_number, address FROM users WHERE id = $1',
+      text: 'SELECT * FROM users WHERE id = $1',
       values: [id],
     };
     const result = await this._pool.query(query);

@@ -1,4 +1,8 @@
 const Hapi = require('@hapi/hapi');
+const Jwt = require('@hapi/jwt');
+const Inert = require('@hapi/inert');
+const Vision = require('@hapi/vision');
+const HapiSwagger = require('hapi-swagger');
 require('dotenv').config();
 
 const ClientError = require('./exceptions/ClientError');
@@ -14,9 +18,34 @@ const AuthenticationsService = require('./services/postgres/AuthenticationsServi
 const AuthenticationsValidator = require('./validator/Authentications');
 const TokenManager = require('./tokenize/TokenManager');
 
+//requests
+const RequestsService = require('./services/postgres/RequestsServices');
+const RequestsValidator = require('./validator/Requests');
+const requests = require('./api/Requests');
+
+const swaggerOptions = {
+  info: {
+    title: 'BantuLink API Documentation',
+    version: '1.0.0',
+    description: 'API documentation for BantuLink',
+    contact: {
+      name: 'BantuLink',
+      url: 'https://github.com/skr-g16/bantulink',
+    },
+  },
+  host: 'https://bantulink-api.site',
+  jsonPath: '/swagger.json',
+  deReference: true,
+  documentationPath: '/docs',
+  grouping: 'tags',
+  sortEndpoints: 'ordered',
+  schemes: ['https'],
+};
+
 const init = async () => {
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
+  const requestsService = new RequestsService();
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
@@ -25,6 +54,35 @@ const init = async () => {
         origin: ['*'],
       },
     },
+  });
+
+  //register jwt
+  await server.register([
+    Inert,
+    Vision,
+    {
+      plugin: HapiSwagger,
+      options: swaggerOptions,
+    },
+    {
+      plugin: Jwt,
+    },
+  ]);
+  //define auth strategy
+  server.auth.strategy('bantulink_jwt', 'jwt', {
+    keys: process.env.ACCESS_TOKEN_KEY,
+    verify: {
+      aud: false,
+      iss: false,
+      sub: false,
+      maxAgeSec: process.env.ACCESS_TOKEN_AGE,
+    },
+    validate: (artifacts) => ({
+      isValid: true,
+      credentials: {
+        id: artifacts.decoded.payload.id,
+      },
+    }),
   });
 
   await server.register([
@@ -42,6 +100,13 @@ const init = async () => {
         usersService,
         tokenManager: TokenManager,
         validator: AuthenticationsValidator,
+      },
+    },
+    {
+      plugin: requests,
+      options: {
+        service: requestsService,
+        validator: RequestsValidator,
       },
     },
   ]);

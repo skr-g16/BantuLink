@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 const autoBind = require('auto-bind');
+const AuthorizationError = require('../../exceptions/AuthorizationsError');
 
 class UsersHandler {
   constructor(service, validator) {
@@ -31,6 +32,10 @@ class UsersHandler {
   }
   async getUserByIdHandler(request) {
     const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+    if (id !== credentialId) {
+      throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
+    }
     const user = await this._service.getUserById(id);
     return {
       status: 'success',
@@ -43,6 +48,10 @@ class UsersHandler {
   async putUserHandler(request) {
     this._validator.validateUpdateProfilePayload(request.payload);
     const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+    if (id !== credentialId) {
+      throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
+    }
     const { fullname, email, password, phone_number, gender, address } =
       request.payload;
     await this._service.editProfileUser(id, {
