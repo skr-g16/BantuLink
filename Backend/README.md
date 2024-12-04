@@ -3,7 +3,7 @@
 ## API Documentation
 
 For detailed API documentation, please visit:
-[https://bantulink-api.site/docs/](https://bantulink-api.site/docs/)
+[https://bantulink-api.site/docs/](https://bantulink-api.site/docs#/)
 
 ## Base URL
 
