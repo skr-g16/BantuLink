@@ -64,16 +64,19 @@ class RequestsService {
     const query = {
       text: `SELECT 
                 r.id,
+                d.id as disaster_id,
+                d.name as disaster_name,
                 r.description,
                 r.request_status,
                 r.created_at,
                 r.updated_at,
-                d.name as disaster_name,
                 (
                   SELECT json_agg(
                     json_build_object(
+                      'category_id', c.id,
                       'category_name', c.name,
                       'quantity', ri.quantity,
+                      'unit_id', u.id,
                       'unit_name', u.name,
                       'description', ri.description
                     )
@@ -94,16 +97,19 @@ class RequestsService {
     const query = {
       text: `SELECT 
                 r.id,
+                d.id as disaster_id,
+                d.name as disaster_name,
                 r.description,
                 r.request_status,
                 r.created_at,
                 r.updated_at,
-                d.name as disaster_name,
                 (
                   SELECT json_agg(
                     json_build_object(
+                      'category_id', c.id,
                       'category_name', c.name,
                       'quantity', ri.quantity,
+                      'unit_id', u.id,
                       'unit_name', u.name,
                       'description', ri.description
                     )
