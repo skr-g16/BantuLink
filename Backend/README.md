@@ -1,133 +1,63 @@
 # BANTULINK API
 
-## Endpoint
+## API Documentation
 
-54.255.179.252:5000
+For detailed API documentation, please visit:
+[https://bantulink-api.site/docs#/](https://bantulink-api.site/docs#/)
 
-## Register User
+## Base URL
 
-**Request** :
+All API requests should be made to:
+`https://bantulink-api.site/`
 
-- Endpoint : `/users`
-- Method : POST
-- Header :
-  - Content-Type: application/json | application/x-www-form-urlencoded
-  - Accept: application/json
-- Body :
+## How to Run the Project
 
-```json
-{
-  "fullname": "string",
-  "email": "string, unique",
-  "password": "string, minlenght(6)",
-  "phone_number": "string pattern(/^(?:+62|62|0)[2-9][0-9]{8,12}$/)", //+62, 62, atau 0 diikuti 8-12 digit
-  "gender": "string",
-  "address": "string, minlenght(10)"
-}
-```
+1.  **Clone the Repository**
+    ```bash
+    git clone https://github.com/your-username/BantuLink.git
+    cd BantuLink/Backend
+    ```
+2.  **Install Dependencies**
 
-**Response** :
+    ```bash
+    npm install
+    ```
 
-```json
-{
-  "status": "success",
-  "message": "User berhasil ditambahkan",
-  "data": {
-    "userId": "user-hEAW5bCYLb_w3Mma"
-  }
-}
-```
+3.  **Set Up Environment Variables**
 
-**=======================================================================================**
+    - Create a new `.env` file in the root of the Backend directory
+    - Add the following variables (replace with your actual values):
 
-## Get User Profile
+    ```bash
+    HOST=localhost
+    PORT=5000
+    PGUSER=your_postgres_username
+    PGHOST=your_postgres_host
+    PGPASSWORD=your_postgres_password
+    PGDATABASE=your_database_name
+    PGPORT=5432
+    ACCESS_TOKEN_KEY=your_access_token_secret
+    REFRESH_TOKEN_KEY=your_refresh_token_secret
+    ACCESS_TOKEN_AGE=1800
+    ```
 
-**Request** :
+4.  **Run Database Migrations**
 
-- Endpoint : `/users/{userId}`
-- Method : GET
-- Header :
-  - Accept: application/json
+    ```bash
+    npm run migrate up
+    ```
 
-**Response** :
+5.  **Start the Server**
 
-```json
-{
-  "status": "success",
-  "data": {
-    "user": {
-      "id": "user-S0SSViM-ZJqJ2mgl",
-      "fullname": "User Test",
-      "email": "usertest@gmail.com",
-      "phone_number": "081266677738",
-      "address": "jl. merak no 21 medan"
-    }
-  }
-}
-```
+- For development:
+  ```bash
+  npm run dev
+  ```
+- For production:
+  ```bash
+      npm start
+  ```
 
-**========================================================================================**
+The server should now be running on http://localhost:5000 (or the port you specified in the .env file).
 
-## Update User Profile
-
-**Request** :
-
-- Endpoint : `/users/{userId}`
-- Method : PUT
-- Header :
-  - Accept: application/json
-  - Content-Type: application/json | application/x-www-form-urlencoded
-- Body :
-
-```json
-{
-  "fullname": "string",
-  "email": "string, unique",
-  "password": "string, minlenght(6)",
-  "phone_number": "string pattern(/^(?:+62|62|0)[2-9][0-9]{8,12}$/)", //+62, 62, atau 0 diikuti 8-12 digit
-  "gender": "string",
-  "address": "string, minlenght(10)"
-}
-```
-
-**Response** :
-
-```json
-{
-  "status": "success",
-  "message": "Profile berhasil di Update"
-}
-```
-
-**=======================================================================================**
-
-## Login User
-
-**Request** :
-
-- Endpoint : `/authentications`
-- Method : POST
-- Header :
-  - Content-Type: application/json
-  - Accept: application/json
-- Body :
-
-```json
-{
-  "email": "string",
-  "password": "string"
-}
-```
-
-**Response** :
-
-```json
-{
-  "status": "success",
-  "message": "Authentication berhasil ditambahkan",
-  "data": {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummyAccessToken",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummyRefreshToken"
-  }
-}
-```
+For detailed information on available endpoints and their usage, please refer to the API documentation linked at the top of this README.
