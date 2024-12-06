@@ -37,7 +37,7 @@ cd BantuLink/Backend
 3. Set Up Environment Variables
 * Create a new .env file in the root of the Backend directory
 * Add the following variables (replace with your actual values):
-```
+`
 HOST=localhost
 PORT=5000
 PGUSER=your_postgres_username
@@ -48,7 +48,7 @@ PGPORT=5432
 ACCESS_TOKEN_KEY=your_access_token_secret
 REFRESH_TOKEN_KEY=your_refresh_token_secret
 ACCESS_TOKEN_AGE=1800
-
+`
 4. Run Database Migrations
 npm run migrate up
 5. Start the Server
