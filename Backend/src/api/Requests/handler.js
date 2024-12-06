@@ -52,7 +52,6 @@ class RequestsHandler {
   async getRequestByIdHandler(request) {
     const { id } = request.params;
     const requestData = await this._service.getRequestById(id);
-
     return {
       status: 'success',
       data: {
@@ -65,10 +64,8 @@ class RequestsHandler {
     this._validator.validateRequestPayload(request.payload);
     const { id } = request.params;
     const { id: credentialId } = request.auth.credentials;
-
     await this._service.verifyRequestOwner(id, credentialId);
     await this._service.updateRequest(id, request.payload);
-
     return {
       status: 'success',
       message: 'Request berhasil diperbarui',
@@ -78,10 +75,8 @@ class RequestsHandler {
   async deleteRequestHandler(request) {
     const { id } = request.params;
     const { id: credentialId } = request.auth.credentials;
-
     await this._service.verifyRequestOwner(id, credentialId);
     await this._service.deleteRequest(id);
-
     return {
       status: 'success',
       message: 'Request berhasil dihapus',
