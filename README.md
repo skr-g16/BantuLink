@@ -10,8 +10,8 @@ BantuLink merupakan nama aplikasi web kami yang bertujuan untuk membantu manajem
 ### Frontend
 #### React + Vite
 how to install + run:
-```pnpm i
-pnpm run dev```
+`pnpm i`
+`pnpm run dev`
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
