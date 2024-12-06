@@ -10,7 +10,6 @@ class RequestsHandler {
     this._validator.validateRequestPayload(request.payload);
     const { id: credentialId } = request.auth.credentials;
     const { disasterId, description, requestItems } = request.payload;
-
     const requestId = await this._service.addRequest({
       disasterId,
       description,
