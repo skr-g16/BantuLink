@@ -10,8 +10,8 @@ BantuLink merupakan nama aplikasi web kami yang bertujuan untuk membantu manajem
 ### Frontend
 #### React + Vite
 how to install + run:
-pnpm i
-pnpm run dev
+```pnpm i
+pnpm run dev```
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
@@ -27,23 +27,23 @@ All API requests should be made to: https://bantulink-api.site/
 
 **How to Run the Project**
 1. Clone the Repository
-  ```git clone https://github.com/your-username/BantuLink.git
-cd BantuLink/Backend```
+  `git clone https://github.com/your-username/BantuLink.git`
+`cd BantuLink/Backend`
 2. Install Dependencies
   `npm install`
 3. Set Up Environment Variables
 * Create a new .env file in the root of the Backend directory
 * Add the following variables (replace with your actual values):
-  ```HOST=localhost
-  PORT=5000
-  PGUSER=your_postgres_username
-  PGHOST=your_postgres_host
-  PGPASSWORD=your_postgres_password
-  PGDATABASE=your_database_name
-  PGPORT=5432
-  ACCESS_TOKEN_KEY=your_access_token_secret
-  REFRESH_TOKEN_KEY=your_refresh_token_secret
-  ACCESS_TOKEN_AGE=1800```
+  `HOST=localhost`
+  `PORT=5000
+  `PGUSER=your_postgres_username`
+  `PGHOST=your_postgres_host`
+  `PGPASSWORD=your_postgres_password`
+  `PGDATABASE=your_database_name`
+  `PGPORT=5432`
+  `ACCESS_TOKEN_KEY=your_access_token_secret`
+  `REFRESH_TOKEN_KEY=your_refresh_token_secret`
+  `ACCESS_TOKEN_AGE=1800`
 4. Run Database Migrations
   `npm run migrate up`
 5. Start the Server
