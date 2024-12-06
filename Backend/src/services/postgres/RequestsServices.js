@@ -30,6 +30,7 @@ class RequestsService {
           owner,
         ],
       };
+      console.log(requestQuery);
 
       const result = await client.query(requestQuery);
       const requestId = result.rows[0].id;
@@ -131,6 +132,41 @@ class RequestsService {
     return result.rows[0];
   }
 
+  async getRequestByOwner(owner) {
+    const query = {
+      text: `SELECT 
+                r.id,
+                d.id as disaster_id,
+                d.name as disaster_name,
+                r.description,
+                r.request_status,
+                r.created_at,
+                r.updated_at,
+                (
+                  SELECT json_agg(
+                    json_build_object(
+                      'category_id', c.id,
+                      'category_name', c.name,
+                      'quantity', ri.quantity,
+                      'unit_id', u.id,
+                      'unit_name', u.name,
+                      'description', ri.description
+                    )
+                  )
+                  FROM request_items ri
+                  JOIN categories c ON ri.category_id = c.id
+                  JOIN units u ON ri.unit_id = u.id
+                  WHERE ri.request_id = r.id
+                ) as items
+              FROM requests r
+              JOIN disasters d ON r.disaster_id = d.id
+              WHERE r.owner = $1`,
+      values: [owner],
+    };
+    const result = await this._pool.query(query);
+    return result.rows;
+  }
+
   async updateRequest(id, { description, requestItems }) {
     const client = await this._pool.connect();
     try {
@@ -204,6 +240,7 @@ class RequestsService {
       text: 'SELECT owner FROM requests WHERE id = $1',
       values: [id],
     };
+    console.log(query);
 
     const result = await this._pool.query(query);
     if (!result.rows.length) {
