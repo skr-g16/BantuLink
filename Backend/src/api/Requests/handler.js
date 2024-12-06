@@ -82,6 +82,18 @@ class RequestsHandler {
       message: 'Request berhasil dihapus',
     };
   }
+
+  async getRequesItemsByRequestId(request) {
+    const { id } = request.params;
+    console.log(id);
+    const requestItems = await this._service.getRequestItemsByRequestId(id);
+    return {
+      status: 'success',
+      data: {
+        requestItems,
+      },
+    };
+  }
 }
 
 module.exports = RequestsHandler;
