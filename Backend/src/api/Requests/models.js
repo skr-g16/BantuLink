@@ -14,10 +14,36 @@ const createRequestResponse = Joi.object({
       .required()
       .description('Request ID')
       .example('request-123'),
+    owner: Joi.string().required(),
   }),
 });
 
 const getResponseById = Joi.object({
+  status: Joi.string()
+    .required()
+    .description('Response status')
+    .example('success'),
+  data: Joi.object({
+    requestId: Joi.string()
+      .required()
+      .description('Request Data')
+      .example({
+        id: 'request-123',
+        disasterId: 'disaster-123',
+        description: 'Bantuan bencana alam',
+        requestItems: [
+          {
+            categoryId: 'category-123',
+            quantity: 10,
+            unitId: 'unit-123',
+            description: 'Peralatan bantuan',
+          },
+        ],
+      }),
+  }),
+});
+
+const getResponseByOwner = Joi.object({
   status: Joi.string()
     .required()
     .description('Response status')
@@ -139,4 +165,5 @@ module.exports = {
   getAllResponse,
   updateResponse,
   deleteResponse,
+  getResponseByOwner,
 };

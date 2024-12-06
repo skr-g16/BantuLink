@@ -49,14 +49,17 @@ All API requests should be made to:
 
 5.  **Start the Server**
 
-- For development:
-  ```bash
-  npm run dev
-  ```
-- For production:
-  ```bash
-      npm start
-  ```
+    For development:
+
+    ```bash
+    npm run dev
+    ```
+
+    For production:
+
+    ```bash
+    npm start
+    ```
 
 The server should now be running on http://localhost:5000 (or the port you specified in the .env file).
 

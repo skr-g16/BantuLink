@@ -5,6 +5,7 @@ const {
   getAllResponse,
   updateResponse,
   deleteResponse,
+  getResponseByOwner,
 } = require('./models');
 const routes = (handler) => [
   {
@@ -44,6 +45,27 @@ const routes = (handler) => [
             200: {
               description: 'Success',
               schema: getResponseById,
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/requests/user/{owner}',
+    handler: handler.getRequestByOwnerHander,
+    options: {
+      auth: 'bantulink_jwt',
+      tags: ['api', 'requests'],
+      description: 'Get request by Owner',
+      plugins: {
+        'hapi-swagger': {
+          security: [{ Bearer: [] }],
+          responses: {
+            200: {
+              description: 'Success',
+              schema: getResponseByOwner,
             },
           },
         },
