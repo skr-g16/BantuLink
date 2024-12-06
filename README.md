@@ -27,14 +27,14 @@ All API requests should be made to: https://bantulink-api.site/
 
 **How to Run the Project**
 1. Clone the Repository
-git clone https://github.com/your-username/BantuLink.git
-cd BantuLink/Backend
+  ```git clone https://github.com/your-username/BantuLink.git
+cd BantuLink/Backend```
 2. Install Dependencies
-npm install
+  `npm install`
 3. Set Up Environment Variables
-- Create a new .env file in the root of the Backend directory
-- Add the following variables (replace with your actual values):
-  HOST=localhost
+* Create a new .env file in the root of the Backend directory
+* Add the following variables (replace with your actual values):
+  ```HOST=localhost
   PORT=5000
   PGUSER=your_postgres_username
   PGHOST=your_postgres_host
@@ -43,12 +43,12 @@ npm install
   PGPORT=5432
   ACCESS_TOKEN_KEY=your_access_token_secret
   REFRESH_TOKEN_KEY=your_refresh_token_secret
-  ACCESS_TOKEN_AGE=1800
+  ACCESS_TOKEN_AGE=1800```
 4. Run Database Migrations
-  npm run migrate up
+  `npm run migrate up`
 5. Start the Server
   For development:
-  npm run dev
+   `npm run dev`
   For production:
-  npm start
+  `npm start`
   The server should now be running on http://localhost:5000 (or the port you specified in the .env file).
