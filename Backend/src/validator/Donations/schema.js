@@ -7,8 +7,8 @@ const donationPayloadSchema = Joi.object({
     .items(
       Joi.object({
         requestItemId: Joi.string().required(),
-        quantity: Joi.number().integer().min(1).required(),
         descriptions: Joi.string().required(),
+        quantity: Joi.number().integer().min(1).required(),
       })
     )
     .min(1)
