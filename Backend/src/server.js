@@ -23,6 +23,11 @@ const RequestsService = require('./services/postgres/RequestsServices');
 const RequestsValidator = require('./validator/Requests');
 const requests = require('./api/Requests');
 
+//donations
+const DonationsService = require('./services/postgres/DonationsServices');
+const DonationsValidator = require('./validator/Donations');
+const donations = require('./api/Donations');
+
 const swaggerOptions = {
   info: {
     title: 'BantuLink API Documentation',
@@ -46,6 +51,7 @@ const init = async () => {
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
   const requestsService = new RequestsService();
+  const donationsService = new DonationsService();
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
@@ -107,6 +113,13 @@ const init = async () => {
       options: {
         service: requestsService,
         validator: RequestsValidator,
+      },
+    },
+    {
+      plugin: donations,
+      options: {
+        service: donationsService,
+        validator: DonationsValidator,
       },
     },
   ]);

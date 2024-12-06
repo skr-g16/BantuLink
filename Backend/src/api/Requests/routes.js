@@ -32,25 +32,25 @@ const routes = (handler) => [
       },
     },
   },
-  {
-    method: 'GET',
-    path: '/requests/{id}',
-    handler: handler.getRequestByIdHandler,
-    options: {
-      tags: ['api', 'requests'],
-      description: 'Get request by id',
-      plugins: {
-        'hapi-swagger': {
-          responses: {
-            200: {
-              description: 'Success',
-              schema: getResponseById,
-            },
-          },
-        },
-      },
-    },
-  },
+  // {
+  //   method: 'GET',
+  //   path: '/requests/{id}',
+  //   handler: handler.getRequestByIdHandler,
+  //   options: {
+  //     tags: ['api', 'requests'],
+  //     description: 'Get request by id',
+  //     plugins: {
+  //       'hapi-swagger': {
+  //         responses: {
+  //           200: {
+  //             description: 'Success',
+  //             schema: getResponseById,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // },
   {
     method: 'GET',
     path: '/requests/user/{owner}',
