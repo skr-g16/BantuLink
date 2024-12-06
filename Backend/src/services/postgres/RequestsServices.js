@@ -251,6 +251,20 @@ class RequestsService {
       throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
     }
   }
+
+  async getRequestItemsByRequestId(id) {
+    const query = {
+      text: 'SELECT * FROM request_items WHERE request_id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Request items tidak ditemukan');
+    }
+    return result.rows;
+  }
 }
 
 module.exports = RequestsService;

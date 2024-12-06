@@ -6,6 +6,7 @@ const {
   updateResponse,
   deleteResponse,
   getResponseByOwner,
+  getResponseRequestItemsByRequestId,
 } = require('./models');
 const routes = (handler) => [
   {
@@ -130,6 +131,25 @@ const routes = (handler) => [
             200: {
               description: 'Success',
               schema: deleteResponse,
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/requests/items/{id}',
+    handler: handler.getRequesItemsByRequestId,
+    options: {
+      tags: ['api', 'requests'],
+      description: 'Get request items by id',
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            200: {
+              description: 'Success',
+              schema: getResponseRequestItemsByRequestId,
             },
           },
         },

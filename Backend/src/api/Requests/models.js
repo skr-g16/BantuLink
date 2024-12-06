@@ -158,6 +158,48 @@ const deleteResponse = Joi.object({
     .example('Request bantuan berhasil dihapus'),
 });
 
+const getResponseRequestItemsByRequestId = Joi.object({
+  status: Joi.string()
+    .required()
+    .description('Response status')
+    .example('success'),
+  data: Joi.array().items(
+    Joi.object({
+      requestItems: Joi.array()
+        .items(
+          Joi.object({
+            id: Joi.string().required().example('request-item-123'),
+            requestId: Joi.string().required().example('request-123'),
+            categoryId: Joi.string().required().example('category-123'),
+            quantity: Joi.number().integer().min(1).required().example(10),
+            unitId: Joi.string().required().example('unit-123'),
+            description: Joi.string().required().example('Peralatan bantuan'),
+          })
+        )
+        .min(1)
+        .required()
+        .example([
+          {
+            id: 'request-item-123',
+            requestId: 'request-123',
+            categoryId: 'category-123',
+            quantity: 10,
+            unitId: 'unit-123',
+            description: 'Peralatan bantuan',
+          },
+          {
+            id: 'request-item-124',
+            requestId: 'request-123',
+            categoryId: 'category-124',
+            quantity: 20,
+            unitId: 'unit-124',
+            description: 'Makanan',
+          },
+        ]),
+    })
+  ),
+});
+
 module.exports = {
   createRequestResponse,
   getResponseById,
@@ -165,4 +207,5 @@ module.exports = {
   updateResponse,
   deleteResponse,
   getResponseByOwner,
+  getResponseRequestItemsByRequestId,
 };
