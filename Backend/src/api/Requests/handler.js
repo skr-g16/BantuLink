@@ -23,7 +23,6 @@ class RequestsHandler {
       message: 'Request bantuan berhasil dibuat',
       data: {
         requestId,
-        owner: credentialId,
       },
     });
     response.code(201);
@@ -42,7 +41,6 @@ class RequestsHandler {
 
   async getRequestByOwnerHander(request) {
     const { id: credentialId } = request.auth.credentials;
-    console.log(credentialId);
     const requests = await this._service.getRequestByOwner(credentialId);
     return {
       status: 'success',

@@ -30,7 +30,6 @@ class RequestsService {
           owner,
         ],
       };
-      console.log(requestQuery);
 
       const result = await client.query(requestQuery);
       const requestId = result.rows[0].id;

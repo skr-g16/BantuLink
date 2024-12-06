@@ -14,7 +14,6 @@ const createRequestResponse = Joi.object({
       .required()
       .description('Request ID')
       .example('request-123'),
-    owner: Joi.string().required(),
   }),
 });
 
