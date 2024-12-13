@@ -9,13 +9,13 @@ class DonationsHandler {
 
   async postDonationHandler(request, h) {
     this._validator.validateDonationPayload(request.payload);
-    const { owner: credentialId } = request.auth.credentials;
-    const { requestId, descriptions, donationItems } = request.payload;
+    const { id: credentialId } = request.auth.credentials;
+    const { requestId, description, donationItems } = request.payload;
     const donationId = await this._service.addDonation({
       requestId,
-      descriptions,
-      owner: credentialId,
+      description,
       donationItems,
+      owner: credentialId,
     });
     const response = h.response({
       status: 'success',
@@ -41,7 +41,7 @@ class DonationsHandler {
 
   async getDonationsByOwner(request) {
     const { id: credentialId } = request.auth.credentials;
-    const donations = await this._service.getDonationsByOwner(credentialId);
+    const donations = await this._service.getDonationByOwner(credentialId);
     return {
       status: 'success',
       data: {
@@ -51,15 +51,14 @@ class DonationsHandler {
   }
 
   async putDonationHandler(request) {
-    this._validator.validateUpdateDonationStatusPayload(request.payload);
+    this._validator.validateDonationPayload(request.payload);
     const { id: credentialId } = request.auth.credentials;
     const { id } = request.params;
-    const { status } = request.payload;
     await this._service.verifyDonationOwner(id, credentialId);
-    await this._service.updateDonationStatus(id, status);
+    await this._service.updateDonation(id, request.payload);
     return {
       status: 'success',
-      message: 'Status donasi berhasil diperbarui',
+      message: 'Donasi berhasil diperbarui',
     };
   }
 
@@ -67,7 +66,7 @@ class DonationsHandler {
     const { id } = request.params;
     const { id: credentialId } = request.auth.credentials;
     await this._service.verifyDonationOwner(id, credentialId);
-    await this._service.deleteDonation(id);
+    await this._service.deleteDonationById(id);
     return {
       status: 'success',
       message: 'Donasi berhasil dihapus',

@@ -11,11 +11,10 @@ class DonationsService {
     this._pool = new Pool();
   }
 
-  async addDonation({ requestId, descriptions, owner, donationItems }) {
+  async addDonation({ requestId, description, owner, donationItems }) {
     const donationId = `donation-${nanoid(16)}`;
     const created_at = new Date().toISOString();
     const updated_at = created_at;
-
     const client = await this._pool.connect();
     try {
       await client.query('BEGIN');
@@ -62,7 +61,7 @@ class DonationsService {
         values: [
           donationId,
           requestId,
-          descriptions,
+          description,
           'Pending',
           created_at,
           updated_at,
@@ -220,20 +219,55 @@ class DonationsService {
     return result.rows;
   }
 
-  async updateDonationStatus(id, status) {
-    const query = {
-      text: 'UPDATE donations SET donor_status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id',
-      values: [status, id],
-    };
-    const result = await this._pool.query(query);
-    if (!result.rows.length) {
-      throw new NotFoundError('Donation tidak ditemukan');
+  async updateDonation(id, { description, donationItems }) {
+    const client = await this._pool.connect();
+    try {
+      await client.query('BEGIN');
+
+      // Update main donation
+      const updateDonationQuery = {
+        text: 'UPDATE donations SET description = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id',
+        values: [description, id],
+      };
+      const donationResult = await client.query(updateDonationQuery);
+      if (!donationResult.rows.length) {
+        throw new NotFoundError('Donation tidak ditemukan');
+      }
+
+      await client.query('DELETE FROM donation_items WHERE donation_id = $1', [
+        id,
+      ]);
+
+      // Update donation items
+      for (const item of donationItems) {
+        const itemId = `item-${nanoid(16)}`;
+        const itemQuery = {
+          text: 'INSERT INTO donation_items(id, donation_id, request_items_id, quantity, description) VALUES($1, $2, $3, $4, $5)',
+          values: [
+            itemId,
+            id,
+            item.requestItemId,
+            item.quantity,
+            item.description,
+          ],
+        };
+        await client.query(itemQuery);
+      }
+
+      await client.query('COMMIT');
+      return donationResult.rows[0].id;
+    } catch (error) {
+      console.log(error.message);
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
     }
   }
 
   async deleteDonationById(id) {
     const query = {
-      text: 'DELETE FROM donations WHERE id = $1',
+      text: 'DELETE FROM donations WHERE id = $1 RETURNING id',
       values: [id],
     };
     const result = await this._pool.query(query);
