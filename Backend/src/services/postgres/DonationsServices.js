@@ -213,8 +213,7 @@ class DonationsService {
               ) as donation_items
             FROM donations d
             JOIN requests r ON d.request_id = r.id
-            WHERE d.owner = $1
-            ORDER BY d.created_at DESC`,
+            WHERE d.owner = $1`,
       values: [owner],
     };
     const result = await this._pool.query(query);
