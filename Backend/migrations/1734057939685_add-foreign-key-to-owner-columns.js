@@ -13,15 +13,7 @@ exports.up = (pgm) => {
     "INSERT INTO users(id, fullname, email, password, phone_number, gender, address) VALUES ('old_notes', 'old_notes', 'old_notes', 'old notes', 'old notes', 'old notes', 'old notes')"
   );
 
-  pgm.sql("UPDATE requests SET owner = 'old_notes' WHERE owner IS NULL");
-
   pgm.sql("UPDATE donations SET owner = 'old_notes' WHERE owner IS NULL");
-
-  pgm.addConstraint(
-    'requests',
-    'fk_requests.owner_users.id',
-    'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE'
-  );
 
   pgm.addConstraint(
     'donations',
@@ -36,11 +28,7 @@ exports.up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 exports.down = (pgm) => {
-  pgm.dropConstraint('requests', 'fk_requests.owner_users.id');
-
   pgm.dropConstraint('donations', 'fk_donations.owner_users.id');
-
-  pgm.sql("UPDATE requests SET owner = NULL WHERE owner = 'old_notes'");
 
   pgm.sql("UPDATE donations SET owner = NULL WHERE owner = 'old_notes'");
 
