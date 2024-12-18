@@ -11,7 +11,7 @@ class DonationsService {
     this._pool = new Pool();
   }
 
-  async addDonation({ requestId, description, owner, donationItems }) {
+  async addDonation({ requestId, description, donationItems, owner }) {
     const donationId = `donation-${nanoid(16)}`;
     const created_at = new Date().toISOString();
     const updated_at = created_at;
@@ -57,7 +57,7 @@ class DonationsService {
 
       // Insert donation
       const donationQuery = {
-        text: 'INSERT INTO donations(id, request_id, description, donor_status, created_at, updated_at, owner) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+        text: 'INSERT INTO donations VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
         values: [
           donationId,
           requestId,
@@ -219,51 +219,135 @@ class DonationsService {
     return result.rows;
   }
 
-  async updateDonation(id, { description, donationItems }) {
-    const client = await this._pool.connect();
-    try {
-      await client.query('BEGIN');
+  // async updateDonation(id, { description, donationItems }) {
+  //   const client = await this._pool.connect();
 
-      // Update main donation
-      const updateDonationQuery = {
-        text: 'UPDATE donations SET description = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id',
-        values: [description, id],
-      };
-      const donationResult = await client.query(updateDonationQuery);
-      if (!donationResult.rows.length) {
-        throw new NotFoundError('Donation tidak ditemukan');
-      }
+  //   try {
+  //     await client.query('BEGIN');
 
-      await client.query('DELETE FROM donation_items WHERE donation_id = $1', [
-        id,
-      ]);
+  //     // Lock the donation row for update
+  //     const donationQuery = {
+  //       text: 'SELECT * FROM donations WHERE id = $1 FOR UPDATE',
+  //       values: [id],
+  //     };
+  //     const donationResult = await client.query(donationQuery);
+  //     if (!donationResult.rows.length) {
+  //       throw new NotFoundError('Donation tidak ditemukan');
+  //     }
 
-      // Update donation items
-      for (const item of donationItems) {
-        const itemId = `item-${nanoid(16)}`;
-        const itemQuery = {
-          text: 'INSERT INTO donation_items(id, donation_id, request_items_id, quantity, description) VALUES($1, $2, $3, $4, $5)',
-          values: [
-            itemId,
-            id,
-            item.requestItemId,
-            item.quantity,
-            item.description,
-          ],
-        };
-        await client.query(itemQuery);
-      }
+  //     const requestId = donationResult.rows[0].request_id;
 
-      await client.query('COMMIT');
-      return donationResult.rows[0].id;
-    } catch (error) {
-      console.log(error.message);
-      await client.query('ROLLBACK');
-      throw error;
-    } finally {
-      client.release();
-    }
-  }
+  //     // Lock the request row for update
+  //     const requestQuery = {
+  //       text: 'SELECT * FROM requests WHERE id = $1 FOR UPDATE',
+  //       values: [requestId],
+  //     };
+  //     const requestResult = await client.query(requestQuery);
+  //     if (!requestResult.rows.length) {
+  //       throw new NotFoundError('Request tidak ditemukan');
+  //     }
+
+  //     // Get previous donation items
+  //     const previousItemsQuery = {
+  //       text: 'SELECT * FROM donation_items WHERE donation_id = $1',
+  //       values: [id],
+  //     };
+  //     const previousItemsResult = await client.query(previousItemsQuery);
+
+  //     // Calculate the total donated quantity for this donation
+  //     const previousTotalDonated = previousItemsResult.rows.reduce(
+  //       (sum, item) => sum + item.quantity,
+  //       0
+  //     );
+
+  //     // Delete old donation items
+  //     await client.query('DELETE FROM donation_items WHERE donation_id = $1', [
+  //       id,
+  //     ]);
+
+  //     // Validate and insert updated donation items
+  //     let newTotalDonated = 0;
+
+  //     for (const item of donationItems) {
+  //       const requestItemQuery = {
+  //         text: 'SELECT * FROM request_items WHERE id = $1 FOR UPDATE',
+  //         values: [item.requestItemId],
+  //       };
+  //       const requestItemResult = await client.query(requestItemQuery);
+
+  //       if (!requestItemResult.rows.length) {
+  //         throw new NotFoundError('Request item tidak ditemukan');
+  //       }
+
+  //       const requestItem = requestItemResult.rows[0];
+
+  //       // Calculate the new remaining quantity
+  //       const remainingQuantity =
+  //         requestItem.quantity + previousTotalDonated - newTotalDonated;
+
+  //       if (item.quantity > remainingQuantity) {
+  //         throw new InvariantError(
+  //           `Quantity donasi (${item.quantity}) melebihi stok yang tersedia (${remainingQuantity})`
+  //         );
+  //       }
+
+  //       newTotalDonated += item.quantity;
+
+  //       const donationsQuery = {
+  //         text: 'UPDATE donations SET description = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id',
+  //         values: [description, id],
+  //       };
+  //       await client.query(donationsQuery);
+
+  //       // Insert updated donation item
+  //       const itemId = `${nanoid(16)}`; // Corrected itemId generation
+  //       const insertItemQuery = {
+  //         text: 'INSERT INTO donation_items (id, donation_id, request_items_id, quantity, description) VALUES ($1, $2, $3, $4, $5)',
+  //         values: [
+  //           itemId,
+  //           id,
+  //           item.requestItemId,
+  //           item.quantity,
+  //           item.description,
+  //         ],
+  //       };
+  //       await client.query(insertItemQuery);
+
+  //       // Update request item quantity
+  //       const updateRequestItemQuantityQuery = {
+  //         text: 'UPDATE request_items SET quantity = quantity - $1 WHERE id = $2',
+  //         values: [item.quantity, item.requestItemId],
+  //       };
+  //       await client.query(updateRequestItemQuantityQuery);
+  //     }
+
+  //     // Calculate total remaining quantity for the request
+  //     const totalQuantityQuery = {
+  //       text: 'SELECT SUM(quantity) AS total_quantity FROM request_items WHERE request_id = $1',
+  //       values: [requestId],
+  //     };
+  //     const totalQuantityResult = await client.query(totalQuantityQuery);
+  //     const totalQuantity = parseInt(
+  //       totalQuantityResult.rows[0].total_quantity,
+  //       10
+  //     );
+
+  //     // Update request status
+  //     const updateRequestStatusQuery = {
+  //       text: 'UPDATE requests SET request_status = $1 WHERE id = $2',
+  //       values: [totalQuantity === 0 ? 'Fulfilled' : 'In Donations', requestId],
+  //     };
+  //     await client.query(updateRequestStatusQuery);
+
+  //     await client.query('COMMIT');
+  //     return donationResult.rows[0].id;
+  //   } catch (error) {
+  //     await client.query('ROLLBACK');
+  //     throw error;
+  //   } finally {
+  //     client.release();
+  //   }
+  // }
 
   async deleteDonationById(id) {
     const query = {

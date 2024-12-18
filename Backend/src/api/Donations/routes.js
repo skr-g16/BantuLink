@@ -3,7 +3,6 @@ const {
   createDonationResponse,
   getDonationByOwnerResponse,
   getDonationByIdResponse,
-  updateDonationsResponse,
   deleteDonationsResponse,
 } = require('./models');
 const routes = (handler) => [
@@ -71,30 +70,30 @@ const routes = (handler) => [
       },
     },
   },
-  {
-    method: 'PUT',
-    path: '/donations/{id}',
-    handler: handler.putDonationHandler,
-    options: {
-      auth: 'bantulink_jwt',
-      tags: ['api', 'donations'],
-      description: 'Update donation by id',
-      validate: {
-        payload: donationPayloadSchema,
-      },
-      plugins: {
-        'hapi-swagger': {
-          security: [{ Bearer: [] }],
-          responses: {
-            200: {
-              description: 'Succes',
-              schema: updateDonationsResponse,
-            },
-          },
-        },
-      },
-    },
-  },
+  // {
+  //   method: 'PUT',
+  //   path: '/donations/{id}',
+  //   handler: handler.putDonationHandler,
+  //   options: {
+  //     auth: 'bantulink_jwt',
+  //     tags: ['api', 'donations'],
+  //     description: 'Update donation by id',
+  //     validate: {
+  //       payload: donationPayloadSchema,
+  //     },
+  //     plugins: {
+  //       'hapi-swagger': {
+  //         security: [{ Bearer: [] }],
+  //         responses: {
+  //           200: {
+  //             description: 'Succes',
+  //             schema: updateDonationsResponse,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // },
   {
     method: 'DELETE',
     path: '/donations/{id}',
