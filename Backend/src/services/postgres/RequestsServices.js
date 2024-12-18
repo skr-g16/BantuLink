@@ -239,7 +239,6 @@ class RequestsService {
       text: 'SELECT owner FROM requests WHERE id = $1',
       values: [id],
     };
-    console.log(query);
 
     const result = await this._pool.query(query);
     if (!result.rows.length) {
